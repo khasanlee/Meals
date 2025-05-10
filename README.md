@@ -18,7 +18,6 @@ A React Native mobile application for browsing meal recipes organized by categor
 - Vector Icons
 
 ## 📁 Project Structure
-
 ```text
 Meals/
 ├── assets/                 # Images and other static resources
@@ -36,6 +35,7 @@ Meals/
 │   ├── MealDetailScreen.js     # Shows details of a specific meal
 │   └── FavoritesScreen.js      # Shows favorite meals
 └── App.js                  # Main app component with navigation setup
+```
 
 
 ## Installation
