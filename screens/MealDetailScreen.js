@@ -1,38 +1,46 @@
-import { useLayoutEffect } from "react";
-import {
-  View,
-  Text,
-  Image,
-  StyleSheet,
-  ScrollView,
-  Button,
-} from "react-native";
-import { MEALS } from "../data/dummy-data";
-import MealDetails from "../components/MealDetails";
-import Subtitle from "../components/MealDetail/Subtitle";
-import List from "../components/MealDetail/List";
-import IconButton from "../components/IconButton";
+import { useContext, useLayoutEffect } from 'react';
+import { View, Text, Image, StyleSheet, ScrollView } from 'react-native';
+import { MEALS } from '../data/dummy-data';
+import MealDetails from '../components/MealDetails';
+import Subtitle from '../components/MealDetail/Subtitle';
+import List from '../components/MealDetail/List';
+import IconButton from '../components/IconButton';
+import { FavoritesContext } from '../store/context/favorites-context';
 
 function MealDetailScreen({ route, navigation }) {
+  const favoriteMealsCtx = useContext(FavoritesContext);
   const mealId = route.params.mealId;
   const selectedMeal = MEALS.find((meal) => meal.id === mealId);
-
-  function headerButtonPressHandler() {
-    console.log("Header button pressed!");
+  
+  const mealIsFavorite = favoriteMealsCtx.ids.includes(mealId);
+  
+  function changeFavoriteStatusHandler() {
+    if (mealIsFavorite) {
+      favoriteMealsCtx.removeFavorite(mealId);
+    } else {
+      favoriteMealsCtx.addFavorite(mealId);
+    }
   }
-
+  
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => {
-        return <IconButton onPress={headerButtonPressHandler} icon="star" color="white"/>;
-      },
+        return (
+          <IconButton 
+            icon={mealIsFavorite ? 'star' : 'star-outline'} 
+            color="white" 
+            onPress={changeFavoriteStatusHandler} 
+          />
+        );
+      }
     });
-  }, [navigation, headerButtonPressHandler]);
+  }, [navigation, changeFavoriteStatusHandler, mealIsFavorite]);
+
   return (
     <ScrollView style={styles.rootContainer}>
-      <Image source={{ uri: selectedMeal.imageUrl }} style={styles.image} />
+      <Image style={styles.image} source={{ uri: selectedMeal.imageUrl }} />
       <Text style={styles.title}>{selectedMeal.title}</Text>
-      <MealDetails
+      <MealDetails 
         duration={selectedMeal.duration}
         complexity={selectedMeal.complexity}
         affordability={selectedMeal.affordability}
@@ -57,25 +65,23 @@ const styles = StyleSheet.create({
     marginBottom: 32,
   },
   image: {
-    width: "100%",
+    width: '100%',
     height: 350,
-    borderWidth: 1,
-    borderColor: "#ccc",
   },
   title: {
+    fontWeight: 'bold',
     fontSize: 24,
-    fontWeight: "bold",
-    textAlign: "center",
     margin: 8,
-    color: "white",
+    textAlign: 'center',
+    color: 'white',
   },
   detailText: {
-    color: "white",
-  },
-  listContainer: {
-    width: "80%",
+    color: 'white',
   },
   listOuterContainer: {
-    alignItems: "center",
+    alignItems: 'center',
+  },
+  listContainer: {
+    width: '80%',
   },
 });
