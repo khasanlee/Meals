@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { View, Text, StyleSheet, FlatList } from 'react-native';
 import { FavoritesContext } from '../store/context/favorites-context';
 import { MEALS } from '../data/dummy-data';
-import MealItem from '../components/MealList/MealItem';
+import MealList from '../components/MealList/MealList';
 
 function FavoritesScreen() {
   const favoriteMealsCtx = useContext(FavoritesContext);
@@ -10,6 +10,7 @@ function FavoritesScreen() {
   const favoriteMeals = MEALS.filter(meal => 
     favoriteMealsCtx.ids.includes(meal.id)
   );
+
   
   if (favoriteMeals.length === 0) {
     return (
@@ -19,47 +20,18 @@ function FavoritesScreen() {
     );
   }
   
-  function renderMealItem(itemData) {
-    const item = itemData.item;
-    
-    const mealItemProps = {
-      id: item.id,
-      title: item.title,
-      imageUrl: item.imageUrl,
-      affordability: item.affordability,
-      complexity: item.complexity,
-      duration: item.duration,
-    };
-    
-    return <MealItem {...mealItemProps} />;
-  }
-  
-  return (
-    <View style={styles.container}>
-      <FlatList 
-        data={favoriteMeals}
-        keyExtractor={(item) => item.id}
-        renderItem={renderMealItem}
-      />
-    </View>
-  );
+  return <MealList items={favoriteMeals} />;
 }
 
 export default FavoritesScreen;
-
-const styles = StyleSheet.create({
+const styles = StyleSheet.create({  
   rootContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
   text: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: 'white',
-  },
-  container: {
-    flex: 1,
-    padding: 16,
+    fontSize: 16,
+    color: '#ccc',
   },
 });
