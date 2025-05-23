@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { View, Text, StyleSheet, FlatList } from 'react-native';
 import { FavoritesContext } from '../store/context/favorites-context';
 import { MEALS } from '../data/dummy-data';
-import MealItem from '../components/MealItem';
+import MealItem from '../components/MealList/MealItem';
 
 function FavoritesScreen() {
   const favoriteMealsCtx = useContext(FavoritesContext);
